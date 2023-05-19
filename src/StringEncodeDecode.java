@@ -10,6 +10,70 @@ public class StringEncodeDecode {
 
     }
 
+
+    public String encode(String plainText) {
+        int len = plainText.length();
+
+        String encodedStr = "";
+
+        char offsetchar = plainText.charAt(0);
+        int  offsetchar_tblindex = str_reference_tbl.indexOf(offsetchar);
+
+        for(int i=1;i<len;i++){
+
+            char currentchar = plainText.charAt(i);
+            int  currentchar_tblindex = str_reference_tbl.indexOf(currentchar);
+
+            if (currentchar_tblindex == -1){	//this character in plaintext is not found in reference table
+                encodedStr += currentchar;		//map back to same character
+            }
+            else{
+                if (currentchar_tblindex - offsetchar_tblindex < 0){
+                    encodedStr += str_reference_tbl.charAt(str_reference_tbl_Len - (offsetchar_tblindex - currentchar_tblindex));
+                }
+                else{
+                    encodedStr += (char) (currentchar_tblindex - offsetchar_tblindex + 'A');
+                }
+            }
+
+        }
+
+        return (offsetchar + encodedStr);
+
+    }
+
+    public String decode(String encodedText){
+
+        int len = encodedText.length();
+
+        String decodedStr = "";
+
+        char offsetchar = encodedText.charAt(0);
+        int  offsetchar_tblindex = str_reference_tbl.indexOf(offsetchar);
+
+        for(int i=1;i<len;i++){
+
+            char currentchar = encodedText.charAt(i);
+            int  currentchar_tblindex = str_reference_tbl.indexOf(currentchar);
+
+            if (currentchar_tblindex == -1){	//this character in plaintext is not found in reference table
+                decodedStr += currentchar;		//map back to same character
+            }
+            else{
+                if (currentchar_tblindex + offsetchar_tblindex < str_reference_tbl_Len){
+                    decodedStr += str_reference_tbl.charAt(currentchar_tblindex+offsetchar_tblindex);
+                }
+                else{
+                    decodedStr += str_reference_tbl.charAt(offsetchar_tblindex - (str_reference_tbl_Len - currentchar_tblindex));
+                }
+
+            }
+        }
+
+        return decodedStr;
+
+    }
+/*
     public String encode(String plainText) {
         int len = plainText.length();
 
@@ -39,7 +103,8 @@ public class StringEncodeDecode {
 
 
     }
-
+*/
+/*
     public String decode(String encodedText) {
 
         int len = encodedText.length();
@@ -72,6 +137,7 @@ public class StringEncodeDecode {
         return decodedStr;
 
     }
+*/
 
     public static void main(String[] args) {
 
@@ -82,7 +148,7 @@ public class StringEncodeDecode {
         System.out.print("Enter plaintext string :");
         String plainText = scanner.nextLine();
 
-        System.out.println("Enter offset character :");
+        System.out.print("Enter offset character :");
         char offsetchar = scanner.nextLine().charAt(0);
         String offsetstr = "" + offsetchar;
         plainText = offsetstr + plainText;
